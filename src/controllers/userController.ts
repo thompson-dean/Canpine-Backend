@@ -1,11 +1,15 @@
 import express, { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 
+const User = require('../models/userModel')
+
 // @description     Get Users
 // @route           GET api/users
 // @access          Private
 const getUsers = asyncHandler(async (req: any, res: Response) => {
-    res.status(200).json({ message: "Get Users" })
+    const users = await User.find()
+
+    res.status(200).json(users)
 })
 
 // @description     Create User
@@ -17,21 +21,43 @@ const createUser = asyncHandler(async (req: Request, res: Response) => {
         throw new Error('Please add a text field')
     }
 
-    res.status(200).json({ message: "Create Users" })
+    const user = await User.create({
+        text: req.body.text
+    })
+
+    res.status(201).json(user)
 })
 
 // @description     Update User
 // @route           PUT api/users/:id
 // @access          Private
 const updateUser = asyncHandler(async (req: Request, res: Response) => {
-    res.status(200).json({ message: `Update User ${req.params.id}` })
+    const user = await User.findById(req.params.id)
+
+    if (!user) {
+        res.status(400)
+        throw new Error('User not found')
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true})
+
+    res.status(200).json(updatedUser)
 })
 
 // @description     Delete User
 // @route           DELETE api/users/:id
 // @access          Private
 const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-    res.status(200).json({ message: `Delete User ${req.params.id}` })
+    const user = await User.findById(req.params.id)
+
+    if (!user) {
+        res.status(400)
+        throw new Error('User not found')
+    }
+
+    await user.remove()
+
+    res.status(200).json({ id: req.params.id })
 })
 
 module.exports = {
