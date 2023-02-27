@@ -1,18 +1,20 @@
 import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema({
-    text: {
-        // id: String,
+    user: {
+        id: String,
         type: String,
-        // location: String,
-        // status: String,
-        // beverage: String,
-        // stars: Number,
-        required: [true, 'please add a text value']
+        location: String,
+        status: String,
+        beverage: String,
+        stars: Number
+        // required: [true, 'please add a text value']
     }
-}, {
-    timestamps: true
-})
+}
+// , {
+//     timestamps: true
+// }
+)
 
 module.exports = mongoose.model('User', userSchema)
 

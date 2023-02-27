@@ -16,13 +16,13 @@ const getUsers = asyncHandler(async (req: any, res: Response) => {
 // @route           POST api/users
 // @access          Private
 const createUser = asyncHandler(async (req: Request, res: Response) => {
-    if (!req.body.text) {
+    if (!req.body.user) {
         res.status(400)
-        throw new Error('Please add a text field')
+        throw new Error('Please add a user object')
     }
 
     const user = await User.create({
-        text: req.body.text
+        user: req.body.user
     })
 
     res.status(201).json(user)
