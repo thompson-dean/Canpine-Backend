@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 
 const User = require('../models/userModel')
@@ -16,17 +16,18 @@ const getUsers = asyncHandler(async (req: any, res: Response) => {
 // @route           POST api/users
 // @access          Private
 const createUser = asyncHandler(async (req: Request, res: Response) => {
+  
     if (!req.body.user) {
-        res.status(400)
-        throw new Error('Please add a user object')
+      res.status(400);
+      throw new Error('Please provide all user details');
     }
-
+  
     const user = await User.create({
         user: req.body.user
-    })
-
-    res.status(201).json(user)
-})
+    });
+  
+    res.status(201).json({ message: 'User created successfully', user });
+  });
 
 // @description     Update User
 // @route           PUT api/users/:id
